@@ -16,7 +16,7 @@ function App() {
         dt: current.dt,
         temp: current.temp,
         feels_like: current.feels_like,
-        icon: current?.weather?.[0]?.icon,
+        icon: current?.weather?.[0]?.id,
         main: current?.weather?.[0]?.main
       });
       setDaily(daily);
@@ -27,12 +27,12 @@ function App() {
   const formatRows = () => {
     return daily.map((day, index) => {
       const weekday = moment(formatDt(day.dt)).format('dddd');
-      const iconCode = day.weather[0].icon;
+      const iconCode = day.weather[0].id;
       const main = day.weather.main;
       return (
         <tr key={index}>
           <td style={{textAlign: "left"}}>{weekday}</td>
-          <td><img src={`http://openweathermap.org/img/wn/${iconCode}@2x.png`} alt={main} /></td>
+          <td><i className={`owf owf-${iconCode} owf-lg`}></i></td>
           <td style={{width:"65px"}}>{getTemp(day.temp.day)}</td>
           <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.feels_like.day)}</td>
         </tr>
