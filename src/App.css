@@ -1,5 +1,16 @@
-.App {
+main {
+  padding: 20px 50px 20px;
+}
+
+section.current {
   text-align: center;
+  width: 300px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+div.subtitle {
+  color: #6a6a6a;
 }
 
 .App-logo {
@@ -14,14 +25,13 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #fafaff;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {

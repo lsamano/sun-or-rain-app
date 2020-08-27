@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { url } from './fetchUrl';
+import './App.css';
 
 function App() {
   const [ current, setCurrent ] = useState({});
@@ -11,6 +12,7 @@ function App() {
     .then(res => res.json())
     .then(({ current, daily, hourly }) => {
       setCurrent({
+        dt: current.dt,
         temp: current.temp,
         feels_like: current.feels_like,
         icon: current?.weather?.[0]?.icon,
@@ -29,15 +31,13 @@ function App() {
         <h1>Sun or Rain</h1>
       </header>
       <main>
-        <section>
-          <h2>Current Weather</h2>
+        <section className="current">
+          <h1>Today, </h1>
           {icon
             && <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt={main} />}
-          <h4>{main}</h4>
-          <ul>
-            <li>Temp: {temp} ℉</li>
-            <li>Feels Like: {feels_like} ℉</li>
-          </ul>
+          <h2>{main}</h2>
+          <h3>{temp} ℉</h3>
+          <div className="subtitle">feels like {feels_like} ℉</div>
         </section>
       </main>
     </div>
