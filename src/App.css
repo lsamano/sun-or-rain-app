@@ -1,6 +1,11 @@
-main {
-  padding: 20px 50px 20px;
-  display: flex;
+.App {
+  max-width: 500px;
+  margin: auto;
+
+}
+
+header {
+  margin-top: 50px;
 }
 
 section {
@@ -9,13 +14,10 @@ section {
 
 section.current {
   text-align: center;
-  width: 300px;
-  background-color: #ffffff;
 }
 
 section.seven-day {
-  flex-grow: 1;
-  padding: 20px 40px 20px;
+  color: white;
 }
 
 table {
@@ -30,11 +32,6 @@ div.subtitle {
   color: #6a6a6a;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -42,8 +39,8 @@ div.subtitle {
 }
 
 .App-header {
-  background-color: #fafaff;
-  min-height: 10vh;
+  /* background-color: #c9e3f5; */
+  /* min-height: 10vh; */
   display: flex;
   flex-direction: column;
   align-items: center;

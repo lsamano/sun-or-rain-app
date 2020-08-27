@@ -31,16 +31,14 @@ function App() {
       const main = day.weather.main;
       return (
         <tr key={index}>
-          <td>{weekday}</td>
+          <td style={{textAlign: "left"}}>{weekday}</td>
           <td><img src={`http://openweathermap.org/img/wn/${iconCode}@2x.png`} alt={main} /></td>
-          <td>{day.temp.day} ℉</td>
-          <td>{day.feels_like.day} ℉</td>
+          <td style={{width:"65px"}}>{getTemp(day.temp.day)}</td>
+          <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.feels_like.day)}</td>
         </tr>
       )
     })
   }
-
-  const { icon, main, temp, feels_like } = current;
 
   const formatDt = dt => {
     let date = new Date();
@@ -48,32 +46,33 @@ function App() {
     return date.setTime(weekday)
   }
 
+  const getTemp = temp => Math.round(parseInt(temp))
+
+  const { icon, main, temp, feels_like } = current;
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Sun or Rain</h1>
+        <div style={{fontSize: "2em"}}>New York</div>
+        <div>{main}</div>
+        <div style={{fontSize: "3em"}}>{getTemp(temp)}°</div>
       </header>
       <main>
         <section className="current">
-          <h5>Today</h5>
-          <h1>{moment(formatDt(current.dt)).format('LL')}</h1>
-          <h1>{moment(formatDt(current.dt)).format('LT')}</h1>
-          {icon
-            && <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt={main} />}
-          <h2>{main}</h2>
-          <h3>{temp} ℉</h3>
-          <div className="subtitle">feels like {feels_like} ℉</div>
+          <table>
+            <tbody>
+              <tr>
+                <td style={{textAlign: "left"}}>
+                  {moment(formatDt(current.dt)).format('dddd')} TODAY
+                </td>
+                <td style={{textAlign: "center", width:"65px"}}>{getTemp(temp)}</td>
+                <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(feels_like)}</td>
+              </tr>
+            </tbody>
+          </table>
         </section>
         <section className="seven-day">
           <table>
-            <thead>
-              <tr>
-                <th>Day</th>
-                <th>Icon</th>
-                <th>Temp</th>
-                <th>Feels Like</th>
-              </tr>
-            </thead>
             <tbody>
               { formatRows() }
             </tbody>
