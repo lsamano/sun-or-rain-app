@@ -1,23 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [ current, setCurrent ] = useState({});
+  const [ daily, setDaily ] = useState({});
+  const [ hourly, setHourly ] = useState({});
+
+  useEffect(() => {
+    const API_KEY = process.env.REACT_APP_API_KEY
+    const lat = process.env.REACT_APP_LAT
+    const lon = process.env.REACT_APP_LON
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&units=units=imperial&appid=${API_KEY}`)
+    .then(res => res.json())
+    .then(({ current, daily, hourly }) => {
+      setCurrent(current);
+      setDaily(daily);
+      setHourly(hourly);
+    })
+  }, [])
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
