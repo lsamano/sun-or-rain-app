@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { url } from './fetchUrl';
 
 function App() {
   const [ current, setCurrent ] = useState({});
@@ -6,19 +7,22 @@ function App() {
   const [ hourly, setHourly ] = useState({});
 
   useEffect(() => {
-    const API_KEY = process.env.REACT_APP_API_KEY
-    const lat = process.env.REACT_APP_LAT
-    const lon = process.env.REACT_APP_LON
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&units=imperial&appid=${API_KEY}`)
+    fetch(url)
     .then(res => res.json())
     .then(({ current, daily, hourly }) => {
-      setCurrent(current);
+      setCurrent({
+        temp: current.temp,
+        feels_like: current.feels_like,
+        icon: current?.weather?.[0]?.icon,
+        main: current?.weather?.[0]?.main
+      });
       setDaily(daily);
       setHourly(hourly);
     })
   }, [])
-  const icon = current?.weather?.[0]?.icon
-  const main = current?.weather?.[0]?.main
+
+  const { icon, main, temp, feels_like } = current;
+
   return (
     <div className="App">
       <header className="App-header">
@@ -27,14 +31,14 @@ function App() {
       <main>
         <section>
           <h2>Current Weather</h2>
-          {icon && <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt={main} />}
-          <h4>{current?.weather?.[0]?.main}</h4>
+          {icon
+            && <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt={main} />}
+          <h4>{main}</h4>
           <ul>
-            <li>Temp: {current.temp} ℉</li>
-            <li>Feels Like: {current.feels_like} ℉</li>
+            <li>Temp: {temp} ℉</li>
+            <li>Feels Like: {feels_like} ℉</li>
           </ul>
         </section>
-
       </main>
     </div>
   );
