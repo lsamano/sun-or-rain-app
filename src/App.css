@@ -1,12 +1,29 @@
 main {
   padding: 20px 50px 20px;
+  display: flex;
+}
+
+section {
+  padding: 20px;
 }
 
 section.current {
   text-align: center;
   width: 300px;
-  padding: 20px;
   background-color: #ffffff;
+}
+
+section.seven-day {
+  flex-grow: 1;
+  padding: 20px 40px 20px;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  text-align: center;
 }
 
 div.subtitle {

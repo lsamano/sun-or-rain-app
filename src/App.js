@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { url } from './fetchUrl';
 import './App.css';
+import moment from 'moment';
 
 function App() {
   const [ current, setCurrent ] = useState({});
-  const [ daily, setDaily ] = useState({});
-  const [ hourly, setHourly ] = useState({});
+  const [ daily, setDaily ] = useState([]);
+  const [ hourly, setHourly ] = useState([]);
 
   useEffect(() => {
     fetch(url)
@@ -23,7 +24,29 @@ function App() {
     })
   }, [])
 
+  const formatRows = () => {
+    return daily.map((day, index) => {
+      const weekday = moment(formatDt(day.dt)).format('dddd');
+      const iconCode = day.weather[0].icon;
+      const main = day.weather.main;
+      return (
+        <tr key={index}>
+          <td>{weekday}</td>
+          <td><img src={`http://openweathermap.org/img/wn/${iconCode}@2x.png`} alt={main} /></td>
+          <td>{day.temp.day} ℉</td>
+          <td>{day.feels_like.day} ℉</td>
+        </tr>
+      )
+    })
+  }
+
   const { icon, main, temp, feels_like } = current;
+
+  const formatDt = dt => {
+    let date = new Date();
+    const weekday = dt * 1000
+    return date.setTime(weekday)
+  }
 
   return (
     <div className="App">
@@ -32,12 +55,29 @@ function App() {
       </header>
       <main>
         <section className="current">
-          <h1>Today, </h1>
+          <h5>Today</h5>
+          <h1>{moment(formatDt(current.dt)).format('LL')}</h1>
+          <h1>{moment(formatDt(current.dt)).format('LT')}</h1>
           {icon
             && <img src={`http://openweathermap.org/img/wn/${icon}@2x.png`} alt={main} />}
           <h2>{main}</h2>
           <h3>{temp} ℉</h3>
           <div className="subtitle">feels like {feels_like} ℉</div>
+        </section>
+        <section className="seven-day">
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Icon</th>
+                <th>Temp</th>
+                <th>Feels Like</th>
+              </tr>
+            </thead>
+            <tbody>
+              { formatRows() }
+            </tbody>
+          </table>
         </section>
       </main>
     </div>
