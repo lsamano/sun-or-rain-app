@@ -16,6 +16,15 @@ section.current {
   text-align: center;
 }
 
+section.hourly {
+  border-style: solid none solid none;
+  border-width: thin;
+  border-color: white;
+  display: flex;
+  overflow: scroll;
+  padding: 0px 20px;
+}
+
 section.seven-day {
   color: white;
 }
@@ -26,7 +35,7 @@ table {
 
 td {
   text-align: center;
-  padding: 8px 0px;
+  padding: 6px 0px;
 }
 
 div.subtitle {

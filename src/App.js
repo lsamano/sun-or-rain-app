@@ -12,43 +12,70 @@ function App() {
     fetch(url)
     .then(res => res.json())
     .then(({ current, daily, hourly }) => {
+      console.log(daily);
       setCurrent({
         dt: current.dt,
         temp: current.temp,
         feels_like: current.feels_like,
+        min: daily[0].temp.min,
+        max: daily[0].temp.max,
         icon: current?.weather?.[0]?.id,
         main: current?.weather?.[0]?.main
       });
-      setDaily(daily);
+      setDaily(daily.slice(1));
       setHourly(hourly);
     })
   }, [])
+
+  const formatHours = () => {
+    return hourly.map((hour, index) => {
+      const simpleHour = formatSimpleHour(hour.dt)
+      const iconCode = hour.weather[0].id;
+      const temp = hour.temp;
+      return (
+        <div key={index} style={{paddingRight: "17px"}}>
+          <p>
+            {simpleHour}
+          </p>
+          <i className={`owf owf-${iconCode} owf-lg`}></i>
+          <p>
+            { getTemp(temp) }°
+          </p>
+        </div>
+      )
+    })
+  }
 
   const formatRows = () => {
     return daily.map((day, index) => {
       const weekday = moment(formatDt(day.dt)).format('dddd');
       const iconCode = day.weather[0].id;
-      const main = day.weather.main;
       return (
         <tr key={index}>
           <td style={{textAlign: "left"}}>{weekday}</td>
           <td><i className={`owf owf-${iconCode} owf-lg`}></i></td>
-          <td style={{width:"65px"}}>{getTemp(day.temp.day)}</td>
-          <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.feels_like.day)}</td>
+          <td style={{width:"65px"}}>{getTemp(day.temp.max)}</td>
+          <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.temp.min)}</td>
         </tr>
       )
     })
   }
 
+  const formatSimpleHour = dt => {
+    const hour = formatDt(dt).getHours();
+    return hour > 12 ? `${hour - 12}pm` : hour === 0 ? "12am" : `${hour}am`;
+  }
+
   const formatDt = dt => {
     let date = new Date();
     const weekday = dt * 1000
-    return date.setTime(weekday)
+    date.setTime(weekday)
+    return date
   }
 
   const getTemp = temp => Math.round(parseInt(temp))
 
-  const { icon, main, temp, feels_like } = current;
+  const { main, temp, min, max } = current;
 
   return (
     <div className="App">
@@ -65,11 +92,14 @@ function App() {
                 <td style={{textAlign: "left"}}>
                   {moment(formatDt(current.dt)).format('dddd')} TODAY
                 </td>
-                <td style={{textAlign: "center", width:"65px"}}>{getTemp(temp)}</td>
-                <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(feels_like)}</td>
+                <td style={{textAlign: "center", width:"65px"}}>{getTemp(max)}</td>
+                <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(min)}</td>
               </tr>
             </tbody>
           </table>
+        </section>
+        <section className="hourly">
+          { formatHours() }
         </section>
         <section className="seven-day">
           <table>
