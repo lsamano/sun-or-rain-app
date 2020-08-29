@@ -2,6 +2,20 @@
   max-width: 500px;
   margin: auto;
 
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1s;
+}
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 header {
@@ -9,7 +23,7 @@ header {
 }
 
 section {
-  padding: 20px;
+  padding: 5px 20px;
 }
 
 section.current {
@@ -23,6 +37,17 @@ section.hourly {
   display: flex;
   overflow: scroll;
   padding: 0px 20px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+section.hourly::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+section.hourly {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 section.seven-day {

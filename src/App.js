@@ -7,6 +7,7 @@ function App() {
   const [ current, setCurrent ] = useState({});
   const [ daily, setDaily ] = useState([]);
   const [ hourly, setHourly ] = useState([]);
+  const [ loaded, setLoaded ] = useState(false);
 
   useEffect(() => {
     fetch(url)
@@ -24,6 +25,7 @@ function App() {
       });
       setDaily(daily.slice(1));
       setHourly(hourly);
+      setLoaded(true);
     })
   }, [])
 
@@ -53,7 +55,7 @@ function App() {
       return (
         <tr key={index}>
           <td style={{textAlign: "left"}}>{weekday}</td>
-          <td><i className={`owf owf-${iconCode} owf-lg`}></i></td>
+          <td style={{width:"100px"}}><i className={`owf owf-${iconCode} owf-lg`}></i></td>
           <td style={{width:"65px"}}>{getTemp(day.temp.max)}</td>
           <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.temp.min)}</td>
         </tr>
@@ -77,40 +79,44 @@ function App() {
 
   const { main, temp, min, max } = current;
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div style={{fontSize: "2em"}}>New York</div>
-        <div>{main}</div>
-        <div style={{fontSize: "3em"}}>{getTemp(temp)}°</div>
-      </header>
-      <main>
-        <section className="current">
-          <table>
-            <tbody>
-              <tr>
-                <td style={{textAlign: "left"}}>
-                  {moment(formatDt(current.dt)).format('dddd')} TODAY
-                </td>
-                <td style={{textAlign: "center", width:"65px"}}>{getTemp(max)}</td>
-                <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(min)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <section className="hourly">
-          { formatHours() }
-        </section>
-        <section className="seven-day">
-          <table>
-            <tbody>
-              { formatRows() }
-            </tbody>
-          </table>
-        </section>
-      </main>
-    </div>
-  );
+  if (loaded) {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <div style={{fontSize: "2em"}}>New York</div>
+          <div>{main}</div>
+          <div style={{fontSize: "3em"}}>{getTemp(temp)}°</div>
+        </header>
+        <main>
+          <section className="current">
+            <table>
+              <tbody>
+                <tr>
+                  <td style={{textAlign: "left"}}>
+                    {moment(formatDt(current.dt)).format('dddd')} TODAY
+                  </td>
+                  <td style={{textAlign: "center", width:"65px"}}>{getTemp(max)}</td>
+                  <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(min)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section className="hourly">
+            { formatHours() }
+          </section>
+          <section className="seven-day">
+            <table>
+              <tbody>
+                { formatRows() }
+              </tbody>
+            </table>
+          </section>
+        </main>
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
 
 export default App;
