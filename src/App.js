@@ -36,17 +36,18 @@ function App() {
       const temp = hour.temp;
       return (
         <div key={index} style={{paddingRight: "17px"}}>
-          <p>
+          <div style={{paddingTop: "10px"}}>
             {simpleHour}
-          <br/>
-            <span style={{color:"lightSkyBlue", fontSize:"0.8em"}}>
-              { hour.pop > 0 ? `${Math.round(hour.pop * 100)}%` : "-" }
-            </span>
-          </p>
-          <i className={`owf owf-${iconCode} owf-lg`}></i>
-          <p>
+          </div>
+          <div style={{color:"lightSkyBlue", fontSize:"0.75em", whiteSpace: "pre-wrap"}}>
+            { hour.pop > 0 ? `${Math.round(hour.pop * 100)}%` : ' ' }
+          </div>
+          <div>
+            <i className={`owf owf-${iconCode} owf-lg`} style={{padding: "7px 0 15px", fontSize: "1.5em"}}></i>
+          </div>
+          <div style={{paddingBottom: "10px", fontSize: "1.2em"}}>
             { getTemp(temp) }°
-          </p>
+          </div>
         </div>
       )
     })
@@ -58,10 +59,10 @@ function App() {
       const iconCode = day.weather[0].id;
       return (
         <tr key={index}>
-          <td style={{textAlign: "left"}}>{weekday}</td>
-          <td style={{width:"100px"}}><i className={`owf owf-${iconCode} owf-lg`}></i></td>
-          <td style={{width:"65px"}}>{getTemp(day.temp.max)}</td>
-          <td style={{color: "#f0f0f0", width:"65px"}}>{getTemp(day.temp.min)}</td>
+          <td style={{textAlign: "left", width: "6em"}}>{weekday}</td>
+          <td><i className={`owf owf-${iconCode} owf-lg`} style={{fontSize: "1.5em"}}></i></td>
+          <td style={{width:"2.5em", fontSize: "1.2em"}}>{getTemp(day.temp.max)}</td>
+          <td style={{color: "#f0f0f0", width:"2.5em", fontSize: "1.2em"}}>{getTemp(day.temp.min)}</td>
         </tr>
       )
     })
@@ -108,8 +109,8 @@ function App() {
                   <td style={{textAlign: "left"}}>
                     {moment(formatDt(current.dt)).format('dddd')} TODAY
                   </td>
-                  <td style={{textAlign: "center", width:"65px"}}>{getTemp(max)}</td>
-                  <td style={{textAlign: "center", width:"65px", color: "#f0f0f0"}}>{getTemp(min)}</td>
+                  <td style={{textAlign: "center", width: "2.5em", fontSize: "1.2em"}}>{getTemp(max)}</td>
+                  <td style={{textAlign: "center", width: "2.5em", color: "#f0f0f0", fontSize: "1.2em"}}>{getTemp(min)}</td>
                 </tr>
               </tbody>
             </table>
