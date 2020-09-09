@@ -13,7 +13,7 @@ function App() {
     fetch(url)
     .then(res => res.json())
     .then(({ current, daily, hourly }) => {
-      console.log(daily);
+      console.log(hourly);
       setCurrent({
         dt: current.dt,
         temp: current.temp,
@@ -31,13 +31,17 @@ function App() {
 
   const formatHours = () => {
     return hourly.map((hour, index) => {
-      const simpleHour = formatSimpleHour(hour.dt)
+      const simpleHour = formatSimpleHour(hour.dt);
       const iconCode = hour.weather[0].id;
       const temp = hour.temp;
       return (
         <div key={index} style={{paddingRight: "17px"}}>
           <p>
             {simpleHour}
+          <br/>
+            <span style={{color:"lightSkyBlue", fontSize:"0.8em"}}>
+              { hour.pop > 0 ? `${Math.round(hour.pop * 100)}%` : "-" }
+            </span>
           </p>
           <i className={`owf owf-${iconCode} owf-lg`}></i>
           <p>
@@ -64,8 +68,17 @@ function App() {
   }
 
   const formatSimpleHour = dt => {
-    const hour = formatDt(dt).getHours();
-    return hour > 12 ? `${hour - 12}pm` : hour === 0 ? "12am" : `${hour}am`;
+    let hour = formatDt(dt).getHours();
+    let meridiem = "AM";
+    if (hour > 12) {
+      hour -= 12;
+      meridiem = "PM";
+    } else if (hour === 0) {
+      hour = 12;
+    }
+    return (
+      <>{hour}<span style={{fontSize:"0.8em"}}>{meridiem}</span></>
+    )
   }
 
   const formatDt = dt => {
