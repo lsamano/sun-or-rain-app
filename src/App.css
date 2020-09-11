@@ -30,6 +30,11 @@ section.current {
   text-align: center;
 }
 
+section.hourly.summary {
+  text-align: left;
+  padding: 0.5em;
+}
+
 section.hourly {
   border-style: solid none solid none;
   border-width: thin;

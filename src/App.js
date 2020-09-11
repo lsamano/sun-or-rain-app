@@ -13,7 +13,6 @@ function App() {
     fetch(url)
     .then(res => res.json())
     .then(({ current, daily, hourly }) => {
-      console.log(hourly);
       setCurrent({
         dt: current.dt,
         temp: current.temp,
@@ -21,7 +20,8 @@ function App() {
         min: daily[0].temp.min,
         max: daily[0].temp.max,
         icon: current?.weather?.[0]?.id,
-        main: current?.weather?.[0]?.main
+        main: current?.weather?.[0]?.main,
+        description: current?.weather?.[0]?.description,
       });
       setDaily(daily.slice(1));
       setHourly(hourly);
@@ -35,9 +35,9 @@ function App() {
       const iconCode = hour.weather[0].id;
       const temp = hour.temp;
       return (
-        <div key={index} style={{paddingRight: "17px"}}>
+        <div key={index} style={{paddingRight: "17px", fontWeight: (index === 0 ? "bold" : "normal")}}>
           <div style={{paddingTop: "10px"}}>
-            {simpleHour}
+            {index === 0 ? "Now" : simpleHour}
           </div>
           <div style={{color:"lightSkyBlue", fontSize:"0.75em", whiteSpace: "pre-wrap"}}>
             { hour.pop > 0 ? `${Math.round(hour.pop * 100)}%` : ' ' }
@@ -91,7 +91,17 @@ function App() {
 
   const getTemp = temp => Math.round(parseInt(temp))
 
-  const { main, temp, min, max } = current;
+  const { main, temp, min, max, description } = current;
+
+  const getSummary = () => {
+    const futureDescription = hourly[7].weather[0].description;
+    const capitalized = futureDescription.charAt(0).toUpperCase() + futureDescription.slice(1);
+    const hours = formatDt(hourly[7].dt).getHours();
+    const word = hours > 12 ? "tonight" : "tomorrow";
+
+    return ` ${capitalized} ${word} with a low of ${getTemp(min)}°.`;
+
+  }
 
   if (loaded) {
     return (
@@ -124,6 +134,11 @@ function App() {
                 { formatRows() }
               </tbody>
             </table>
+          </section>
+          <section className="hourly summary">
+            Today: {description.charAt(0).toUpperCase() + description.slice(1)}.
+            The high will be {getTemp(daily?.[0].temp.max)}°.
+            { getSummary() }
           </section>
         </main>
       </div>
