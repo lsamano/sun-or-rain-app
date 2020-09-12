@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { url } from './fetchUrl';
 import './App.css';
 import moment from 'moment';
+import Header from './Header';
+import TodayRow from './TodayRow';
+import Hourly from './Hourly';
+import { formatDt, getTemp } from './utilities';
 
 function App() {
   const [ current, setCurrent ] = useState({});
@@ -29,30 +33,6 @@ function App() {
     })
   }, [])
 
-  const formatHours = () => {
-    return hourly.map((hour, index) => {
-      const simpleHour = formatSimpleHour(hour.dt);
-      const iconCode = hour.weather[0].id;
-      const temp = hour.temp;
-      return (
-        <div key={index} style={{paddingRight: "17px", fontWeight: (index === 0 ? "bold" : "normal")}}>
-          <div style={{paddingTop: "10px"}}>
-            {index === 0 ? "Now" : simpleHour}
-          </div>
-          <div style={{color:"lightSkyBlue", fontSize:"0.75em", whiteSpace: "pre-wrap"}}>
-            { hour.pop > 0 ? `${Math.round(hour.pop * 100)}%` : ' ' }
-          </div>
-          <div>
-            <i className={`owf owf-${iconCode} owf-lg`} style={{padding: "7px 0 15px", fontSize: "1.5em"}}></i>
-          </div>
-          <div style={{paddingBottom: "10px", fontSize: "1.2em"}}>
-            { getTemp(temp) }°
-          </div>
-        </div>
-      )
-    })
-  }
-
   const formatRows = () => {
     return daily.map((day, index) => {
       const weekday = moment(formatDt(day.dt)).format('dddd');
@@ -68,30 +48,7 @@ function App() {
     })
   }
 
-  const formatSimpleHour = dt => {
-    let hour = formatDt(dt).getHours();
-    let meridiem = "AM";
-    if (hour > 12) {
-      hour -= 12;
-      meridiem = "PM";
-    } else if (hour === 0) {
-      hour = 12;
-    }
-    return (
-      <>{hour}<span style={{fontSize:"0.8em"}}>{meridiem}</span></>
-    )
-  }
-
-  const formatDt = dt => {
-    let date = new Date();
-    const weekday = dt * 1000
-    date.setTime(weekday)
-    return date
-  }
-
-  const getTemp = temp => Math.round(parseInt(temp))
-
-  const { main, temp, min, max, description } = current;
+  const { dt, main, temp, min, max, description } = current;
 
   const getSummary = () => {
     const futureDescription = hourly[7].weather[0].description;
@@ -106,28 +63,10 @@ function App() {
   if (loaded) {
     return (
       <div className="App">
-        <header className="App-header">
-          <div style={{fontSize: "2em"}}>New York</div>
-          <div>{main}</div>
-          <div style={{fontSize: "3em"}}>{getTemp(temp)}°</div>
-        </header>
+        <Header main={main} temp={temp}/>
         <main>
-          <section className="current">
-            <table>
-              <tbody>
-                <tr>
-                  <td style={{textAlign: "left"}}>
-                    {moment(formatDt(current.dt)).format('dddd')} TODAY
-                  </td>
-                  <td style={{textAlign: "center", width: "2.5em", fontSize: "1.2em"}}>{getTemp(max)}</td>
-                  <td style={{textAlign: "center", width: "2.5em", color: "#f0f0f0", fontSize: "1.2em"}}>{getTemp(min)}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-          <section className="hourly">
-            { formatHours() }
-          </section>
+          <TodayRow dt={dt} max={max} min={min}/>
+          <Hourly hourly={hourly} temp={temp} />
           <section className="seven-day">
             <table>
               <tbody>
