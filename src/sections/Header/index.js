@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getTemp } from './utilities';
+import { getTemp } from '../../utilities';
 
 const Header = ({ main, temp }) => {
   return (

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { url } from './fetchUrl';
+import { url } from './utilities';
 import './App.css';
-import Header from './Header';
-import TodayRow from './TodayRow';
-import Hourly from './Hourly';
-import SevenDay from './SevenDay';
-import Summary from './Summary';
+import Header from './sections/Header';
+import TodayRow from './sections/TodayRow';
+import Hourly from './sections/Hourly';
+import SevenDay from './sections/SevenDay';
+import Summary from './sections/Summary';
 
 function App() {
   const [ current, setCurrent ] = useState({});

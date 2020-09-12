@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatDt, getTemp } from './utilities';
+import { formatDt, getTemp } from '../../utilities';
 
 const Summary = ({ hourly, daily, description, min }) => {
   const getSummary = () => {
